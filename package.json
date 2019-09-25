@@ -1,0 +1,16 @@
+{
+  "name": "first-test-chat",
+  "license": "MIT",
+  "description": "A first test",
+  "version": "0.0.1",
+  "type": "module",
+  "dependencies": {
+    "koa": "^2.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  },
+  "scripts": {
+    "app": "nodemon --experimental-modules app.js"
+  }
+}
