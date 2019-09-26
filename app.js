@@ -17,7 +17,8 @@ router.get('/', async ctx => {
 	<title>Chat337</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href='http://fonts.googleapis.com/css?family=Gorditas:700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="client.js"></script>
 </head>
 
 <body>
@@ -46,11 +47,18 @@ router.get('/', async ctx => {
   </div>
 
   <div id="chat">
-    <input type="text" id="input" placeholder="Type your message..."><button class="send" id="button">&#9654;</button>
+  <form id="chat-message">
+    <input type="text" id="chat-message-input" placeholder="Type your message..."><input type="submit" id="button" value="&#9654;">
+    </form>
   </div>
 	</section>
 </body>
 </html>`;
+});
+
+router.get('/client.js', async ctx => {
+  ctx.type = '.js';
+  ctx.body = readFileSync('./client.js');
 });
 
 router.get('/image/:fileName', async ctx => {
@@ -97,7 +105,7 @@ h1 {
   right: 0;
   background: #fff;
 }
-input[type=text], button {
+input[type=text], input[type=submit], button {
   -webkit-appearance: none;
   -moz-appearance: none;
   border: 1px solid #ddd;
@@ -105,15 +113,6 @@ input[type=text], button {
   font-size: 1em;
   padding: .7em 1em;
   margin-bottom: 1em;
-}
-button.send {
-  background: #e6e6e6;
-  text-shadow: 0 1px 0 #f3f3f3;
-  margin: .5em 0 2em 0;
-  display: inline-block;
-  top: 0px;
-  width: 50px;
-  position: relative;
 }
 #chat {
   height: 60px;
@@ -131,8 +130,8 @@ button.send {
   top: 0px;
   width: calc(100% - 75px);
 }
-#main {
-  margin: 60px 1em 1em;
+#output {
+  margin: 60px 1em 60px 1em;
   display: flex;
   flex-direction: column-reverse;
   max-height: 100vh;
@@ -153,6 +152,15 @@ button.send {
   border-radius: 50%;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
+}
+#button {
+  background: #e6e6e6;
+  text-shadow: 0 1px 0 #f3f3f3;
+  margin: .5em 0 2em 0 !important;
+  display: inline-block;
+  top: 0px;
+  width: 50px !important;
+  position: relative;
 }
   `;
 });
