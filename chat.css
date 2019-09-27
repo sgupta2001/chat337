@@ -1,5 +1,17 @@
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
+@media (min-width: 500px) {
+  .main-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+  }
+  #chat {
+    width: 500px !important;
+  }
+}
+
+
 html {
     height: 100%;
 }
