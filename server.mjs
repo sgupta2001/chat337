@@ -120,6 +120,12 @@ export class Chat337 {
   getConversation(user1, user2) {
     const id = this.getConversationId(user1, user2);
     const conversation = this.conversation.get(id);
-    return conversation;
+    return {
+      messages: conversation,
+      users: [
+        this.toBasicUser(this.users.get(user1)),
+        this.toBasicUser(this.users.get(user2))
+      ]
+    } ;
   }
 }

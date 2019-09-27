@@ -71,7 +71,7 @@ input[type=text], input[type=submit], button {
   max-height: 100vh;
   overflow: auto;
 }
-#output span, #chats > span {
+#output span, #chats-elements > span {
   display: block;
   padding: 0.5em;
   padding-left: 60px;
@@ -112,7 +112,7 @@ input[type=text], input[type=submit], button {
   text-align: center;
   padding-bottom: 2em;
 }
-#chats img {
+#chats-elements img {
   float: left;
   margin-left: -60px;
   width: 50px;
@@ -121,19 +121,26 @@ input[type=text], input[type=submit], button {
   margin-right: 0.5em;
   margin-bottom: 0.5em;
 }
-#chats > span {
+#chats-elements > span {
   border-bottom: 1px solid #ccc;
   padding-bottom: 20px;
 }
-#chats > span:last-of-type {
+#chats-elements > span:last-of-type {
   border-bottom: 0;
 }
-#chats span span {
+#chats-elements span span {
   display: block;
 }
-#chats .name {
+#chats-elements .name {
   font-weight: bold;
 }
 .last-msg {
   font-size: 90%;
+}
+
+.back-button {
+  margin: 14px;
+  position: absolute;
+  top: 0;
+  font-size: 200%;
 }

@@ -7,7 +7,7 @@ async function showUsers() {
 
     for (const user of users) {
       login.insertAdjacentHTML('beforeend', `
-        <span onClick="showChats('${user.userId}')">
+        <span onClick="showChats('${user.userId}', '${user.profilePicture}')">
           <img src="/image/${user.profilePicture}">
           ${user.userName}
         </span>`);
@@ -17,16 +17,21 @@ async function showUsers() {
   }
 }
 
-async function showChats(userId) {
+async function showChats(userId, profilePicture) {
+  globalThis.chat337UserId = userId;
+  globalThis.chat337ProfilePicture = profilePicture;
+
   const response = await fetch(`/json/chats/${userId}.json`);
 
-  const login = document.getElementById("login");
-  login.style.display = "none";
-
-  const chats = document.getElementById("chats");
+  const chats = document.getElementById("chats-elements");
 
   if (response.ok) {
     const data = await response.json();
+
+    // clean up old elements
+    while (chats.lastChild) {
+      chats.removeChild(chats.lastChild);
+    }
 
     for (const chat of data.chats) {
       const sender = chat.sender;
@@ -47,29 +52,66 @@ async function showChats(userId) {
   } else {
     chats.insertAdjacentText('beforeend', `Failed to retrieve chats for ${userId}.`);
   }
-  chats.style.display = "block";
+
+  enableView("chats");
 }
 
 async function showChat(userId, receiver) {
   const response = await fetch(`/json/chat/${userId}/${receiver}.json`);
-
-  const chats = document.getElementById("chats");
-  chats.style.display = "none";
-
-  const conversation = document.getElementById("conversation");
+  const output = document.getElementById("output");
 
   if (response.ok) {
     const data = await response.json();
+
+    // clean up old elements
+    while (output.lastChild) {
+      output.removeChild(output.lastChild);
+    }
+
+    const users = new Map();
+    for (const u of data.users) {
+      users.set(u.userId, u);
+    }
+
+    for (const m of data.messages) {
+      addMessage(users.get(m.sender), m.text);
+    }
   } else {
-    conversation.insertAdjacentText(
+    output.insertAdjacentText(
       'beforeend', `Failed to retrieve conversation between ${userId} and ${receiver}.`);
   }
 
-  conversation.style.display = "block";
+  enableView("conversation");
+}
+
+function enableView(view) {
+  const chats = document.getElementById("chats");
+  const login = document.getElementById("login");
+  const conversation = document.getElementById("conversation");
+
+  chats.style.display = "none";
+  login.style.display = "none";
+  conversation.style.display = "none";
+
+  switch (view) {
+    case "chats":
+      chats.style.display = "block";
+      break;
+    case "login":
+      login.style.display = "block";
+      break;
+    case "conversation":
+      conversation.style.display = "block";
+      break;
+  }
+}
+
+function showLogin() {
+  enableView("login");
 }
 
 function addMessage(user, message) {
-  const msg = `<span><img src="/image/${user}.jpg">${message}</span>`;
+  const msg = `<span><img src="/image/${user.profilePicture}">${message}</span>`;
 
   const output = document.getElementById("output");
   output.insertAdjacentHTML('beforeend', msg); // afterbegin
@@ -80,7 +122,7 @@ function sendMessage(event) {
   event.preventDefault();
   const input = document.getElementById("chat-message-input");
 
-  addMessage("Stefan-Marr", input.value);
+  addMessage({profilePicture: globalThis.chat337ProfilePicture}, input.value);
   input.value = "";
 }
 
