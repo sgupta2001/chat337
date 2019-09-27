@@ -1,6 +1,9 @@
 function addMessage(user, message) {
   const msg = `<span><img src="/image/${user}.jpg">${message}</span>`;
-  document.getElementById("output").insertAdjacentHTML('afterbegin', msg);
+
+  const output = this.document.getElementById("output");
+  output.insertAdjacentHTML('beforeend', msg); // afterbegin
+  output.scrollTop = output.scrollHeight;
 }
 
 function sendMessage(event) {
@@ -14,4 +17,7 @@ function sendMessage(event) {
 window.addEventListener("load", function () {
   const form = document.getElementById("chat-message");
   form.addEventListener("submit", sendMessage);
+
+  const output = this.document.getElementById("output");
+  output.scrollTop = output.scrollHeight;
 });
