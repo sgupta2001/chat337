@@ -64,14 +64,14 @@ input[type=text], input[type=submit], button {
   top: 0px;
   width: calc(100% - 75px);
 }
-#output {
+#output, #login, #chats {
   margin: 60px 1em 60px 1em;
   /* display: flex;
   flex-direction: column-reverse; */
   max-height: 100vh;
   overflow: auto;
 }
-#output span {
+#output span, #chats > span {
   display: block;
   padding: 0.5em;
   padding-left: 60px;
@@ -95,4 +95,45 @@ input[type=text], input[type=submit], button {
   top: 0px;
   width: 50px !important;
   position: relative;
+}
+
+#login img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  margin-bottom: 0.5em;
+}
+#login span {
+  display: block;
+  margin: auto;
+  width: 80%;
+  text-align: center;
+  padding-bottom: 2em;
+}
+#chats img {
+  float: left;
+  margin-left: -60px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+}
+#chats > span {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+}
+#chats > span:last-of-type {
+  border-bottom: 0;
+}
+#chats span span {
+  display: block;
+}
+#chats .name {
+  font-weight: bold;
+}
+.last-msg {
+  font-size: 90%;
 }
