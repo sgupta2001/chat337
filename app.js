@@ -56,17 +56,17 @@ router.get('/style.css', async ctx => {
   ctx.body = readFileSync('./chat.css');
 });
 
-router.get('/json/users.json', async ctx => {
+router.get('/json/users', async ctx => {
   ctx.type = 'application/json';
   ctx.body = chat.getUsers();
 });
 
-router.get('/json/chats/:userId.json', async ctx => {
+router.get('/json/chats/:userId', async ctx => {
   ctx.type = 'application/json';
   ctx.body = chat.listAllContacts(ctx.params.userId);
 });
 
-router.get('/json/chat/:userId/:receiver.json', async ctx => {
+router.get('/json/chat/:userId/:receiver', async ctx => {
   ctx.type = 'application/json';
   ctx.body = chat.allMessages(ctx.params.userId, ctx.params.receiver);
 });

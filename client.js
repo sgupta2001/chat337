@@ -21,7 +21,7 @@ class Chat337Client {
     this.userId = userId;
     this.profilePicture = profilePicture;
 
-    const response = await fetch(`/json/chats/${userId}.json`);
+    const response = await fetch(`/json/chats/${userId}`);
 
     if (response.ok) {
       const data = await response.json();
@@ -55,7 +55,7 @@ class Chat337Client {
   }
 
   async showUsers() {
-    const response = await fetch("/json/users.json");
+    const response = await fetch("/json/users");
 
 
     if (response.ok) {
@@ -76,7 +76,7 @@ class Chat337Client {
   async showChat(userId, receiver) {
     this.receiverUserId = receiver;
 
-    const response = await fetch(`/json/chat/${userId}/${receiver}.json`);
+    const response = await fetch(`/json/chat/${userId}/${receiver}`);
 
 
     if (response.ok) {
