@@ -63,12 +63,12 @@ router.get('/json/users.json', async ctx => {
 
 router.get('/json/chats/:userId.json', async ctx => {
   ctx.type = 'application/json';
-  ctx.body = chat.getChats(ctx.params.userId);
+  ctx.body = chat.listAllContacts(ctx.params.userId);
 });
 
 router.get('/json/chat/:userId/:receiver.json', async ctx => {
   ctx.type = 'application/json';
-  ctx.body = chat.getConversation(ctx.params.userId, ctx.params.receiver);
+  ctx.body = chat.allMessages(ctx.params.userId, ctx.params.receiver);
 });
 
 router.post('/json/send/:receiverId', koaBody(), async ctx => {

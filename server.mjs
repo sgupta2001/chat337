@@ -46,12 +46,32 @@ export class Chat337 {
     this.conversation = new Map();
   }
 
-  listAllContacts() {
+  listAllContacts(userId) {
+    const user = this.users.get(userId);
+    const chats = user.getChats();
 
+    const users = [];
+    for (const chat of chats) {
+      const user = this.users.get(chat.sender);
+      users.push(this.toBasicUser(user));
+    }
+
+    return {
+      chats: chats,
+      users: users
+    }
   }
 
-  allMessages() {
-
+  allMessages(user1, user2) {
+    const id = this.getConversationId(user1, user2);
+    const conversation = this.conversation.get(id);
+    return {
+      messages: conversation,
+      users: [
+        this.toBasicUser(this.users.get(user1)),
+        this.toBasicUser(this.users.get(user2))
+      ]
+    } ;
   }
 
   newMessages() {
@@ -93,39 +113,11 @@ export class Chat337 {
     return result;
   }
 
-  getChats(userId) {
-    const user = this.users.get(userId);
-    const chats = user.getChats();
-
-    const users = [];
-    for (const chat of chats) {
-      const user = this.users.get(chat.sender);
-      users.push(this.toBasicUser(user));
-    }
-
-    return {
-      chats: chats,
-      users: users
-    }
-  }
-
   getConversationId(user1, user2) {
     if (user1 < user2) {
       return `${user1}//${user2}`;
     } else {
       return `${user2}//${user1}`;
     }
-  }
-
-  getConversation(user1, user2) {
-    const id = this.getConversationId(user1, user2);
-    const conversation = this.conversation.get(id);
-    return {
-      messages: conversation,
-      users: [
-        this.toBasicUser(this.users.get(user1)),
-        this.toBasicUser(this.users.get(user2))
-      ]
-    } ;
   }
 }
