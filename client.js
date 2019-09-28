@@ -3,6 +3,14 @@ class Chat337Client {
     this.userId = null;
     this.profilePicture = null;
     this.receiverUserId = null;
+
+    this.chatsElem = document.getElementById("chats-elements");
+    this.loginElem = document.getElementById("login");
+    this.outputElem = document.getElementById("output");
+
+    this.chatsWrapper = document.getElementById("chats");
+    this.conversationElem = document.getElementById("conversation");
+    this.inputElem = document.getElementById("chat-message-input");
   }
 
   async showCurrentChats() {
@@ -15,14 +23,12 @@ class Chat337Client {
 
     const response = await fetch(`/json/chats/${userId}.json`);
 
-    const chats = document.getElementById("chats-elements");
-
     if (response.ok) {
       const data = await response.json();
 
       // clean up old elements
-      while (chats.lastChild) {
-        chats.removeChild(chats.lastChild);
+      while (this.chatsElem.lastChild) {
+        this.chatsElem.removeChild(this.chatsElem.lastChild);
       }
 
       for (const chat of data.chats) {
@@ -34,7 +40,7 @@ class Chat337Client {
           }
         }
 
-        chats.insertAdjacentHTML('beforeend', `
+        this.chatsElem.insertAdjacentHTML('beforeend', `
           <span onClick="globalThis.chat337.showChat('${userId}', '${sender}')">
             <img src="/image/${user.profilePicture}">
             <span class="name">${user.userName}</span>
@@ -42,7 +48,7 @@ class Chat337Client {
           </span>`);
       }
     } else {
-      chats.insertAdjacentText('beforeend', `Failed to retrieve chats for ${userId}.`);
+      this.chatsElem.insertAdjacentText('beforeend', `Failed to retrieve chats for ${userId}.`);
     }
 
     this.enableView("chats");
@@ -51,19 +57,19 @@ class Chat337Client {
   async showUsers() {
     const response = await fetch("/json/users.json");
 
-    const login = document.getElementById("login");
+
     if (response.ok) {
       const users = await response.json();
 
       for (const user of users) {
-        login.insertAdjacentHTML('beforeend', `
+        this.loginElem.insertAdjacentHTML('beforeend', `
           <span onClick="globalThis.chat337.showChats('${user.userId}', '${user.profilePicture}')">
             <img src="/image/${user.profilePicture}">
             ${user.userName}
           </span>`);
       }
     } else {
-      login.insertAdjacentText('beforeend', "Failed to retrieve users.");
+      this.loginElem.insertAdjacentText('beforeend', "Failed to retrieve users.");
     }
   }
 
@@ -71,14 +77,14 @@ class Chat337Client {
     this.receiverUserId = receiver;
 
     const response = await fetch(`/json/chat/${userId}/${receiver}.json`);
-    const output = document.getElementById("output");
+
 
     if (response.ok) {
       const data = await response.json();
 
       // clean up old elements
-      while (output.lastChild) {
-        output.removeChild(output.lastChild);
+      while (this.outputElem.lastChild) {
+        this.outputElem.removeChild(this.outputElem.lastChild);
       }
 
       const users = new Map();
@@ -90,7 +96,7 @@ class Chat337Client {
         this.addMessage(users.get(m.sender), m.text);
       }
     } else {
-      output.insertAdjacentText(
+      this.outputElem.insertAdjacentText(
         'beforeend', `Failed to retrieve conversation between ${userId} and ${receiver}.`);
     }
 
@@ -98,23 +104,20 @@ class Chat337Client {
   }
 
   enableView(view) {
-    const chats = document.getElementById("chats");
-    const login = document.getElementById("login");
-    const conversation = document.getElementById("conversation");
 
-    chats.style.display = "none";
-    login.style.display = "none";
-    conversation.style.display = "none";
+    this.chatsWrapper.style.display = "none";
+    this.loginElem.style.display = "none";
+    this.conversationElem.style.display = "none";
 
     switch (view) {
       case "chats":
-        chats.style.display = "block";
+        this.chatsWrapper.style.display = "block";
         break;
       case "login":
-        login.style.display = "block";
+        this.loginElem.style.display = "block";
         break;
       case "conversation":
-        conversation.style.display = "block";
+        this.conversationElem.style.display = "block";
         break;
     }
   }
@@ -126,20 +129,19 @@ class Chat337Client {
   addMessage(user, message) {
     const msg = `<span><img src="/image/${user.profilePicture}">${message}</span>`;
 
-    const output = document.getElementById("output");
-    output.insertAdjacentHTML('beforeend', msg); // afterbegin
-    output.scrollTop = output.scrollHeight;
+    this.outputElem.insertAdjacentHTML('beforeend', msg); // afterbegin
+    this.outputElem.scrollTop = this.outputElem.scrollHeight;
   }
 
   async sendMessage(event) {
     event.preventDefault();
-    const input = document.getElementById("chat-message-input");
 
-    const msg = input.value;
+
+    const msg = this.inputElem.value;
 
     this.addMessage(this, msg);
 
-    input.value = "";
+    this.inputElem.value = "";
 
     await fetch(
       `/json/send/${this.receiverUserId}`,
@@ -154,14 +156,13 @@ class Chat337Client {
   }
 }
 
-globalThis.chat337 = new Chat337Client();
-
-
 window.addEventListener("load", function () {
-  globalThis.chat337.showUsers();
+  const client  = new Chat337Client();
+  globalThis.chat337 = client;
+  client.showUsers();
 
   const form = document.getElementById("chat-message");
-  form.addEventListener("submit", event => globalThis.chat337.sendMessage(event));
+  form.addEventListener("submit", event => client.sendMessage(event));
 
   const output = document.getElementById("output");
   output.scrollTop = output.scrollHeight;
