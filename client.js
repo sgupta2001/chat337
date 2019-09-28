@@ -130,12 +130,26 @@ function addMessage(user, message) {
   output.scrollTop = output.scrollHeight;
 }
 
-function sendMessage(event) {
+async function sendMessage(event) {
   event.preventDefault();
   const input = document.getElementById("chat-message-input");
 
-  addMessage({profilePicture: globalThis.chat337ProfilePicture}, input.value);
+  const msg = input.value;
+
+  addMessage(globalThis.chat337, msg);
+
   input.value = "";
+
+  await fetch(
+    `/json/send/${globalThis.chat337.receiverUserId}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        sender: globalThis.chat337.userId,
+        message: msg
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    });
 }
 
 window.addEventListener("load", function () {

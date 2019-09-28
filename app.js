@@ -2,6 +2,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import { readFileSync, existsSync } from 'fs';
 import { Chat337, User } from './server.mjs';
+import koaBody from 'koa-body';
 
 const app = new Koa();
 const router = new Router();
@@ -68,6 +69,12 @@ router.get('/json/chats/:userId.json', async ctx => {
 router.get('/json/chat/:userId/:receiver.json', async ctx => {
   ctx.type = 'application/json';
   ctx.body = chat.getConversation(ctx.params.userId, ctx.params.receiver);
+});
+
+router.post('/json/send/:receiverId', koaBody(), async ctx => {
+  console.log([ctx.request.body.sender, ctx.params.receiverId, ctx.request.body.message]);
+  chat.sendMessage(ctx.request.body.sender, ctx.params.receiverId, ctx.request.body.message);
+  ctx.status = 201;
 });
 
 app.use(router.routes());
