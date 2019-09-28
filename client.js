@@ -1,3 +1,13 @@
+class Chat337GlobalData {
+  constructor() {
+    this.userId = null;
+    this.profilePicture = null;
+    this.receiverUserId = null;
+  }
+}
+
+globalThis.chat337 = new Chat337GlobalData();
+
 async function showUsers() {
   const response = await fetch("/json/users.json");
 
@@ -18,8 +28,8 @@ async function showUsers() {
 }
 
 async function showChats(userId, profilePicture) {
-  globalThis.chat337UserId = userId;
-  globalThis.chat337ProfilePicture = profilePicture;
+  globalThis.chat337.userId = userId;
+  globalThis.chat337.profilePicture = profilePicture;
 
   const response = await fetch(`/json/chats/${userId}.json`);
 
@@ -57,6 +67,8 @@ async function showChats(userId, profilePicture) {
 }
 
 async function showChat(userId, receiver) {
+  globalThis.chat337.receiverUserId = receiver;
+
   const response = await fetch(`/json/chat/${userId}/${receiver}.json`);
   const output = document.getElementById("output");
 
