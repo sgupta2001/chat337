@@ -64,6 +64,8 @@ export class Chat337 {
 
   allMessages(user1, user2) {
     const id = this.getConversationId(user1, user2);
+    this.ensureConversation(id);
+
     const conversation = this.conversation.get(id);
     return {
       messages: conversation,
@@ -86,13 +88,17 @@ export class Chat337 {
 
   }
 
+  ensureConversation(conversationId) {
+    if (!this.conversation.has(conversationId)) {
+      this.conversation.set(conversationId, []);
+    }
+  }
+
   sendMessage(sender, receiver, message) {
     const msg = new Message(sender, receiver, message);
     const user = this.users.get(receiver);
     const conversationId = this.getConversationId(sender, receiver);
-    if (!this.conversation.has(conversationId)) {
-      this.conversation.set(conversationId, []);
-    }
+    this.ensureConversation(conversationId);
 
     this.conversation.get(conversationId).push(msg);
     user.send(msg);
