@@ -72,7 +72,6 @@ router.get('/json/chat/:userId/:receiver', async ctx => {
 });
 
 router.post('/json/send/:receiverId', koaBody(), async ctx => {
-  console.log([ctx.request.body.sender, ctx.params.receiverId, ctx.request.body.message]);
   chat.sendMessage(ctx.request.body.sender, ctx.params.receiverId, ctx.request.body.message);
   ctx.status = 201;
 });
