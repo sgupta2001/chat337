@@ -4,7 +4,6 @@
   "description": "A first test",
   "version": "0.0.1",
   "repository": {},
-  "type": "module",
   "dependencies": {
     "koa": "^2.8.1",
     "koa-body": "^4.1.1",
@@ -16,11 +15,8 @@
     "mocha": "^6.2.0",
     "nodemon": "^1.19.2"
   },
-  "esm": {
-    "cjs":true
-  },
   "scripts": {
-    "app": "nodemon --experimental-modules app.js",
+    "app": "nodemon --experimental-modules app.mjs",
     "test": "mocha --require esm  \"test/*.js\""
   }
 }
