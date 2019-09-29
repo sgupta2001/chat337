@@ -16,6 +16,9 @@
     "mocha": "^6.2.0",
     "nodemon": "^1.19.2"
   },
+  "esm": {
+    "cjs":true
+  },
   "scripts": {
     "app": "nodemon --experimental-modules app.js",
     "test": "mocha --require esm  \"test/*.js\""
