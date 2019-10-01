@@ -4,6 +4,8 @@ import { readFileSync, existsSync } from 'fs';
 import { Chat337, User } from './server.mjs';
 import koaBody from 'koa-body';
 
+const PORT = process.env.PORT || 33333
+
 const app = new Koa();
 const router = new Router();
 
@@ -79,4 +81,4 @@ router.post('/json/send/:receiverId', koaBody(), async ctx => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen(33333);
+app.listen(PORT);
