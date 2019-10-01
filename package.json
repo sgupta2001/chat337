@@ -4,6 +4,9 @@
   "description": "A first test",
   "version": "0.0.1",
   "repository": {},
+  "engines": {
+    "node": ">=12.10.0"
+  },
   "dependencies": {
     "koa": "^2.8.1",
     "koa-body": "^4.1.1",
