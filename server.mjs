@@ -1,3 +1,27 @@
+export function initSystem() {
+  const smarr = new User("smarr", "Stefan Marr", "Stefan-Marr.jpg");
+  const queen = new User("queen", "The Queen", "Queen-Elizabeth-II.jpg");
+  const chancellor = new User("chancellor", "The Chancellor", "Angela-Merkel.jpg");
+
+  const chat = new Chat337([
+    smarr,
+    queen,
+    chancellor
+  ]);
+
+  chat.sendMessage("queen", "smarr", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
+  chat.sendMessage("chancellor", "smarr", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
+
+  chat.sendMessage("smarr", "queen", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
+  chat.sendMessage("chancellor", "queen", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
+
+  chat.sendMessage("queen", "chancellor", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
+  chat.sendMessage("smarr", "chancellor", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
+
+  return chat;
+}
+
+
 class Message {
   constructor(sender, receiver, text, isRead = false) {
     this.sender = sender;

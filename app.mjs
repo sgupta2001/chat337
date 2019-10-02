@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import Router from 'koa-router';
 import { readFileSync, existsSync } from 'fs';
-import { Chat337, User } from './server.mjs';
+import { initSystem } from './server.mjs';
 import koaBody from 'koa-body';
 
 const PORT = process.env.PORT || 33333
@@ -9,27 +9,7 @@ const PORT = process.env.PORT || 33333
 const app = new Koa();
 const router = new Router();
 
-
-const smarr = new User("smarr", "Stefan Marr", "Stefan-Marr.jpg");
-const queen = new User("queen", "The Queen", "Queen-Elizabeth-II.jpg");
-const chancellor = new User("chancellor", "The Chancellor", "Angela-Merkel.jpg");
-
-const chat = new Chat337([
-  smarr,
-  queen,
-  chancellor
-]);
-
-chat.sendMessage("queen", "smarr", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
-chat.sendMessage("chancellor", "smarr", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
-
-
-chat.sendMessage("smarr", "queen", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
-chat.sendMessage("chancellor", "queen", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
-
-chat.sendMessage("queen", "chancellor", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
-chat.sendMessage("smarr", "chancellor", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.");
-
+const chat = initSystem();
 
 router.get('/', async ctx => {
   ctx.type = '.html';
