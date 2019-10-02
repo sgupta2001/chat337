@@ -147,15 +147,16 @@ class Chat337Client {
         return;
       }
       const result = await this.requestDetailsForUrl(url);
-      const desc = result.desc ? `<p>${result.desc}</p>` : '';
-      const img = result.img ? `<img src="${result.img}">` : '';
-      msgElem.insertAdjacentHTML('afterend', `
-        <span class='msg-details'><a href="${result.url}">
-          <p><strong>${result.title}</strong></p>
-          ${desc}
-          ${img}
-        </a></span>
-      `);
+      if (result.url && result.title) {
+        const desc = result.desc ? `<p>${result.desc}</p>` : '';
+        const img = result.img ? `<img src="${result.img}">` : '';
+        msgElem.insertAdjacentHTML('afterend', `
+          <span class='msg-details'><a href="${result.url}">
+            <p><strong>${result.title}</strong></p>
+            ${desc}
+            ${img}
+          </a></span>`);
+      }
     }
   }
 
