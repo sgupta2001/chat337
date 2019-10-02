@@ -11,31 +11,31 @@ const router = new Router();
 
 const chat = initSystem();
 
-router.get('/', async ctx => {
-  ctx.type = '.html';
-  ctx.body = readFileSync('./chat.html');
-});
-
-router.get('/client.js', async ctx => {
-  ctx.type = '.js';
-  ctx.body = readFileSync('./client.js');
-});
-
-router.get('/image/:fileName', async ctx => {
-  ctx.type = '.jpg';
-  const fileName = 'resources/' + ctx.params.fileName;
+function replyWithFile(ctx, fileName, type) {
+  ctx.type = type;
   if (existsSync(fileName)) {
     ctx.body = readFileSync(fileName);
   } else {
     ctx.status = 404;
-    ctx.body = `File "${ctx.params.fileName}" not found`;
+    ctx.body = `File "${fileName}" not found.`;
     ctx.type = '.txt';
   }
+}
+
+router.get('/', async ctx => {
+  replyWithFile(ctx, './resources/chat.html', '.html');
+});
+
+router.get('/client.js', async ctx => {
+  replyWithFile(ctx, './client.js', '.js');
+});
+
+router.get('/image/:fileName', async ctx => {
+  replyWithFile(ctx, 'resources/' + ctx.params.fileName, '.jpg');
 });
 
 router.get('/style.css', async ctx => {
-  ctx.type = '.css';
-  ctx.body = readFileSync('./chat.css');
+  replyWithFile(ctx, './resources/chat.css', '.css');
 });
 
 router.get('/json/users', async ctx => {
