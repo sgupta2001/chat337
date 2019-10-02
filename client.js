@@ -126,22 +126,59 @@ class Chat337Client {
     this.enableView("login");
   }
 
-  addMessage(user, message) {
+  async addMessage(user, message) {
     const msg = `<span><img src="/image/${user.profilePicture}">${message}</span>`;
 
     this.outputElem.insertAdjacentHTML('beforeend', msg); // afterbegin
     this.outputElem.scrollTop = this.outputElem.scrollHeight;
+
+    await this.showLinkInMessage(message, this.outputElem.lastChild);
+  }
+
+  async showLinkInMessage(message, msgElem) {
+    // message = "Check out:\nhttps://www.theguardian.com/commentisfree/2018/feb/18/does-every-cloud-have-silver-lining-not-if-run-by-internet-giant";
+    // message = "Check out:\nhttps://www.bbc.co.uk/news/technology-48841815";
+    const match = message.match(/(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/i);
+
+    if (match) {
+      const url = match[0];
+      if (url.endsWith('.')) {
+        // try to exclude last word in sentence, likely not a url
+        return;
+      }
+      const result = await this.requestDetailsForUrl(url);
+      const desc = result.desc ? `<p>${result.desc}</p>` : '';
+      const img = result.img ? `<img src="${result.img}">` : '';
+      msgElem.insertAdjacentHTML('afterend', `
+        <span class='msg-details'><a href="${result.url}">
+          <p><strong>${result.title}</strong></p>
+          ${desc}
+          ${img}
+        </a></span>
+      `);
+    }
+  }
+
+  async requestDetailsForUrl(url) {
+    const response = await fetch(
+      "https://29c22c97.eu-gb.apiconnect.appdomain.cloud/chat337/get-meta",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({url: url})
+      });
+    return await response.json();
   }
 
   async sendMessage(event) {
     event.preventDefault();
 
-
     const msg = this.inputElem.value;
-
-    this.addMessage(this, msg);
-
     this.inputElem.value = "";
+
+    const messageDisplayed = this.addMessage(this, msg);
 
     await fetch(
       `/json/send/${this.receiverUserId}`,
@@ -153,6 +190,8 @@ class Chat337Client {
         }),
         headers: { 'Content-Type': 'application/json' }
       });
+
+    await messageDisplayed;
   }
 }
 
